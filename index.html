@@ -6,7 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inconsolata">
-    Kinga Banach, [07.01.20 14:42]
     <!-- Hotjar Tracking Code for https://kekemato.github.io/dummy-hotjar-data/ -->
     <script>
         (function(h,o,t,j,a,r){
@@ -34,17 +33,30 @@
         list-style: none;
     }
 
+    .loader {
+        border: 16px solid #f3f3f3; /* Light grey */
+        border-top: 16px solid #3498db; /* Blue */
+        border-radius: 50%;
+        width: 100px;
+        height: 100px;
+        animation: spin 2s linear infinite;
+    }
+
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+
     .memeImage {
-        width: 600px;
-        height: auto;
+        max-height: 90vh;
+        width: auto;
         box-shadow: 0px 6px 29px 1px rgba(0,0,0,0.75);
     }
 
     .bgimg {
     background-position: center;
     background-size: cover;
-    background-image: url("/w3images/coffeehouse.jpg");
-    min-height: 75%;
+    min-height: 55%;
     }
 
     .menu {
@@ -66,16 +78,13 @@
     <div class="w3-col s3">
       <a href="#menu" class="w3-button w3-block w3-black">MENU</a>
     </div>
-    <div class="w3-col s3">
-      <a href="#where" class="w3-button w3-block w3-black">WHERE</a>
-    </div>
   </div>
 </div>
 
 <!-- Header with image -->
 <header class="bgimg w3-display-container w3-grayscale-min" id="home">
   <div class="w3-display-middle w3-center">
-    <span style="font-size:90px">Memes<br>Templates</span>
+    <span style="font-size:90px">Random Memes</span>
   </div>
 </header>
 
@@ -178,23 +187,26 @@ document.getElementById("myLink").click();
 
 <script>
     const memesList = document.getElementById('memesList');
-    fetch('https://api.imgflip.com/get_memes')
-    .then(response => response.json())
-    .then(r => {
-        r.data.memes
-        .slice(0,10)
-        .map(meme => {
+    const loader = document.createElement('div');
+    loader.setAttribute('class', 'loader');
+    memesList.appendChild(loader);
+        fetch('https://meme-api.herokuapp.com/gimme/10')
+        .then(response => response.json())
+        .then(r => {
+            memesList.removeChild(loader);
+            r.memes.map(meme => {
             const memeItem = document.createElement('li');
 
             const memeImage = document.createElement('img');
             memeImage.setAttribute('src', meme.url);
-            memeImage.setAttribute('alt', meme.url);
+            memeImage.setAttribute('alt', 'something went wrong... :(');
             memeImage.setAttribute('class', 'memeImage');
 
             memeItem.appendChild(memeImage);
             memesList.appendChild(memeItem);
+            })
+          
         })
-    })
 </script>
 
 </body>
